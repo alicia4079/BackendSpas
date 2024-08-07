@@ -12,7 +12,7 @@ const app = express();
 app.use(express.json());
 
 connectDB()
-server.use(cors())
+app.use(cors())
 
 app.use(express.json());
 
