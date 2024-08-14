@@ -19,19 +19,6 @@ const getCostumersById = async (req, res, next) => {
   }
 }
 
-const getCostumerByEmail = async (req, res) => {
-  try {
-    const { email } = req.params;
-    const costumer = await Costumer.findOne({ email });
-    if (!costumer) {
-      return res.status(404).json({ message: 'Cliente no encontrado' });
-    }
-    return res.status(200).json(costumer);
-  } catch (error) {
-    return res.status(400).json({ message: 'Error al buscar cliente' });
-  }
-}
-
 const postCostumer = async (req, res, next) => {
   try {
     const { name } = req.body
@@ -74,4 +61,4 @@ const updateCostumer = async (req, res, next) => {
   }
 } 
 
-module.exports = {getCostumers, getCostumersById, postCostumer, deleteCostumer, updateCostumer, getCostumerByEmail}
+module.exports = {getCostumers, getCostumersById, postCostumer, deleteCostumer, updateCostumer}
