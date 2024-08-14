@@ -4,7 +4,7 @@ const { getCostumers, getCostumersById, postCostumer, deleteCostumer, updateCost
 
 const costumerRoutes = require('express').Router()
 
-costumerRoutes.get('/',isAuth, isAdmin, getCostumers)
+costumerRoutes.get('/',isAuth, getCostumers)
 costumerRoutes.get('/:id', isAuth, getCostumersById)
 costumerRoutes.post('/', isAuth, isAdmin, postCostumer)
 costumerRoutes.delete('/:id',isAuth, isAdmin, deleteCostumer)
