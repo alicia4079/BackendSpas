@@ -24,7 +24,7 @@ const getCostumerByEmail = async (req, res) => {
     if (!email) {
       return res.status(400).json({ message: 'El email es requerido' });
     }
-    const costumer = await Costumer.findOne({ email });
+    const costumer = await Costumer.findOne({ email }).populate('spa');
     if (!costumer) {
       return res.status(404).json({ message: 'Cliente no encontrado' });
     }
