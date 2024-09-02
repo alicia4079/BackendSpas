@@ -36,21 +36,21 @@ const getCostumerByEmail = async (req, res) => {
 
 const postCostumer = async (req, res, next) => {
   try {
-    const { name } = req.body
-    const existingCostumer = await Costumer.findOne({ name })
+    const { email } = req.body; 
+    const existingCostumer = await Costumer.findOne({ email }); 
 
     if (existingCostumer) {
       return res
         .status(400)
-        .json({ error: 'Ya existe un cliente con este nombre' })
+        .json({ error: 'Ya existe un cliente con este email' }); 
     }
 
-    const newCostumer = new Costumer(req.body)
-    const costumerSaved = await newCostumer.save()
+    const newCostumer = new Costumer(req.body);
+    const costumerSaved = await newCostumer.save();
 
-    return res.status(201).json(costumerSaved)
+    return res.status(201).json(costumerSaved);
   } catch (error) {
-    return res.status(400).json(error)
+    return res.status(400).json(error);
   }
 }
 
