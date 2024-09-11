@@ -30,9 +30,11 @@ const getCostumerByEmail = async (req, res) => {
     }
     return res.status(200).json(costumer);
   } catch (error) {
-    return res.status(400).json({ message: 'Error al buscar cliente por email' });
+    console.error('Error al buscar cliente por email:', error.message);
+    return res.status(400).json({ message: 'Error al buscar cliente por email', error: error.message });
   }
 };
+
 
 const postCostumer = async (req, res, next) => {
   try {
