@@ -7,6 +7,6 @@ usersRoutes.get('/',isAuth, isAdmin, getUsers)
 usersRoutes.post('/register', register)
 usersRoutes.post('/login', login)
 usersRoutes.delete('/:id', isAuth, isAdmin, deleteUser)
-usersRoutes.delete('/:id', isAuth, changePassword)
+usersRoutes.put('/:id', isAuth, changePassword)
 
 module.exports = usersRoutes
