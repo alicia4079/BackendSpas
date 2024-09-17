@@ -70,19 +70,19 @@ const getUsers = async (req, res, next) => {
 const changePassword = async (req, res, next) => {
   try {
     const { id } = req.params; 
-    const { newPassword } = req.body; 
+    const { password } = req.body; 
 
-    if (!newPassword) {
-      return res.status(400).json({ message: 'Se requiere una nueva contraseña' });
+    if (!password) {
+      return res.status(400).json({ message: 'Se requiere una contraseña nueva' });
     }
 
     const saltRounds = 10;
-    const hashedPassword = bcrypt.hashSync(newPassword, saltRounds);
+    const hashedPassword = bcrypt.hashSync(password, saltRounds);
 
     const updatedUser = await User.findByIdAndUpdate(
       id,
       { password: hashedPassword }, 
-      { new: true }
+      { new: true } 
     );
 
     if (!updatedUser) {
@@ -94,6 +94,7 @@ const changePassword = async (req, res, next) => {
     return res.status(500).json({ message: 'Error al cambiar la contraseña', error });
   }
 };
+
 
 
 module.exports = { register, login, deleteUser, getUsers, changePassword };
