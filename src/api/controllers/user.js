@@ -69,24 +69,34 @@ const getUsers = async (req, res, next) => {
 
 const changePassword = async (req, res, next) => {
   try {
-    const { id } = req.params; 
-    const { password } = req.body; 
+    const { id } = req.params;
+    const { currentPassword, newPassword } = req.body;
 
-    if (!password) {
-      return res.status(400).json({ message: 'Se requiere una contraseña nueva' });
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ message: 'Se requieren la contraseña actual y la nueva' });
+    }
+
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+
+    const isMatch = bcrypt.compareSync(currentPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: 'La contraseña actual es incorrecta' });
     }
 
     const saltRounds = 10;
-    const hashedPassword = bcrypt.hashSync(password, saltRounds);
+    const hashedPassword = bcrypt.hashSync(newPassword, saltRounds);
 
     const updatedUser = await User.findByIdAndUpdate(
       id,
-      { password: hashedPassword }, 
-      { new: true } 
+      { password: hashedPassword },
+      { new: true }
     );
 
     if (!updatedUser) {
-      return res.status(404).json({ message: 'Usuario no encontrado' });
+      return res.status(404).json({ message: 'Error al actualizar la contraseña' });
     }
 
     return res.status(200).json({ message: 'Contraseña actualizada correctamente' });
@@ -94,6 +104,7 @@ const changePassword = async (req, res, next) => {
     return res.status(500).json({ message: 'Error al cambiar la contraseña', error });
   }
 };
+
 
 
 
