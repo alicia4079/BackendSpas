@@ -69,10 +69,10 @@ const getUsers = async (req, res, next) => {
 
 const changePassword = async (req, res, next) => {
   try {
-    const { userId } = req.params; 
+    const { id } = req.params
     const { oldPassword, newPassword } = req.body; 
 
-    const user = await User.findById(userId);
+    const user = await User.findById(id);
 
     if (!user) {
       return res.status(404).json({ message: 'Usuario no encontrado' });
