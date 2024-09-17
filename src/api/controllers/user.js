@@ -69,32 +69,32 @@ const getUsers = async (req, res, next) => {
 
 const changePassword = async (req, res, next) => {
   try {
-    const { id } = req.params
-    const { oldPassword, newPassword } = req.body; 
+    const { id } = req.params; 
+    const { newPassword } = req.body; 
 
-    const user = await User.findById(id);
-
-    if (!user) {
-      return res.status(404).json({ message: 'Usuario no encontrado' });
-    }
-
-    const isMatch = bcrypt.compareSync(oldPassword, user.password);
-
-    if (!isMatch) {
-      return res.status(400).json({ message: 'La contraseña actual es incorrecta' });
+    if (!newPassword) {
+      return res.status(400).json({ message: 'Se requiere una nueva contraseña' });
     }
 
     const saltRounds = 10;
     const hashedPassword = bcrypt.hashSync(newPassword, saltRounds);
 
-    user.password = hashedPassword;
-    await user.save();
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      { password: hashedPassword }, 
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
 
     return res.status(200).json({ message: 'Contraseña actualizada correctamente' });
   } catch (error) {
     return res.status(500).json({ message: 'Error al cambiar la contraseña', error });
   }
 };
+
 
 module.exports = { register, login, deleteUser, getUsers, changePassword };
 
