@@ -66,4 +66,36 @@ const getUsers = async (req, res, next) => {
   }
 }
 
-module.exports = { register, login, deleteUser, getUsers }
+
+const changePassword = async (req, res, next) => {
+  try {
+    const { userId } = req.params; 
+    const { oldPassword, newPassword } = req.body; 
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+
+    const isMatch = bcrypt.compareSync(oldPassword, user.password);
+
+    if (!isMatch) {
+      return res.status(400).json({ message: 'La contraseña actual es incorrecta' });
+    }
+
+    const saltRounds = 10;
+    const hashedPassword = bcrypt.hashSync(newPassword, saltRounds);
+
+    user.password = hashedPassword;
+    await user.save();
+
+    return res.status(200).json({ message: 'Contraseña actualizada correctamente' });
+  } catch (error) {
+    return res.status(500).json({ message: 'Error al cambiar la contraseña', error });
+  }
+};
+
+module.exports = { register, login, deleteUser, getUsers, changePassword };
+
+
