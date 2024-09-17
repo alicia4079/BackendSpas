@@ -86,9 +86,14 @@ const changePassword = async (req, res, next) => {
       return res.status(400).json({ message: 'La contraseña actual es incorrecta' });
     }
 
+    const isSamePassword = bcrypt.compareSync(newPassword, user.password);
+    if (isSamePassword) {
+      return res.status(400).json({ message: 'La nueva contraseña no puede ser igual a la actual' });
+    }
+
     const saltRounds = 10;
     const hashedPassword = bcrypt.hashSync(newPassword, saltRounds);
-
+  
     const updatedUser = await User.findByIdAndUpdate(
       id,
       { password: hashedPassword },
@@ -104,6 +109,7 @@ const changePassword = async (req, res, next) => {
     return res.status(500).json({ message: 'Error al cambiar la contraseña', error });
   }
 };
+
 
 
 
